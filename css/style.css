@@ -23,9 +23,7 @@ header
    background: aqua;
 }
 
-.row1,
-.row2,
-.row3
+.board-rows
 {
    width: auto;
    height: 33%;
@@ -50,6 +48,7 @@ img
    object-fit: cover;
    width: 100%;
    height: 100%;
+   cursor: not-allowed;
 }
 
 footer
