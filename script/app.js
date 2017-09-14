@@ -1,9 +1,9 @@
 // Global Variables (Avoid adding lots of them! They bad!)
 var randomButton = document.querySelector('#random');
 var resetGame = document.querySelector('#reset');
+var storedClicks = ["", "", "", "", "", "", "", "", ""];
 var stillPlaying = true;
 var boardNotFull = true;
-var storedClicks = ["", "", "", "", "", "", "", "", ""];
 var numClicks = 0;
 
 // Click event for choosing who goes first
@@ -19,7 +19,6 @@ var startGame = function(itIsPlayerOne)
 {
    // Build after basic function done
    // buildGameBoard();
-
    // Set playing order
    setPlayingOrder(itIsPlayerOne);
 
@@ -38,12 +37,12 @@ var setPlayingOrder = function(itIsPlayerOne)
 {
    if (itIsPlayerOne)
    {
-      console.log('Player 1 goes first');
+      console.log('Player 1 (Doggo) goes first');
       // Set as player 1 goes first
    }
    else
    {
-      console.log('Player 2 goes first');
+      console.log('Player 2 (Kitteh) goes first');
       // Set as player 2 goes first
    }
 
@@ -61,24 +60,24 @@ var startTurns = function(itIsPlayerOne)
    // Change the game loop logic, a bit messy here
    gameBoard.addEventListener('click', function(event)
    {
-      if (itIsPlayerOne)
-      {
-         changeSquare(player1);
-      }
-      else
-      {
-         changeSquare(player2);
-      }
+      var checkSquare = event.target.id;
 
-      checkWinner(event, storedClicks, itIsPlayerOne);
+      if (storedClicks[checkSquare] === "")
+      {
+         if (stillPlaying)
+         {
+            if (itIsPlayerOne)
+            {
+               changeSquare(player1);
+            }
+            else
+            {
+               changeSquare(player2);
+            }
 
-      if (!stillPlaying)
-      {
-         finishGame(itIsPlayerOne, player1, player2);
-      }
-      else
-      {
-         itIsPlayerOne = changePlayerTurn(itIsPlayerOne);
+            checkWinner(event, storedClicks, itIsPlayerOne);
+            itIsPlayerOne = changePlayerTurn(itIsPlayerOne);
+         }
       }
    });
 }
@@ -103,7 +102,7 @@ var changePlayerTurn = function(itIsPlayerOne)
 
 // Check Winner
 // Refactor winning conditions...lol
-var checkWinner = function(event, storedClicks, itIsPlayerOne)
+var checkWinner = function(event, storedClicks, itIsPlayerOne, player1, player2)
 {
    var checkSquare = event.target.id;
    storedClicks[checkSquare] = itIsPlayerOne ? true : false;
@@ -112,48 +111,44 @@ var checkWinner = function(event, storedClicks, itIsPlayerOne)
    if ((storedClicks[0] === true && storedClicks[1] === true && storedClicks[2] === true) || (storedClicks[3] === true && storedClicks[4] === true && storedClicks[5] === true) || (storedClicks[6] === true && storedClicks[7] === true && storedClicks[8] === true))
    {
       stillPlaying = false;
-      return itIsPlayerOne;
+      finishGame(itIsPlayerOne, player1, player2);
    }
    // Winning conditions for columns for player 1
    else if ((storedClicks[0] === true && storedClicks[3] === true && storedClicks[6] === true) || (storedClicks[1] === true && storedClicks[4] === true && storedClicks[7] === true) || (storedClicks[2] === true && storedClicks[5] === true && storedClicks[8] === true))
    {
       stillPlaying = false;
-      return itIsPlayerOne;
+      finishGame(itIsPlayerOne, player1, player2);
    }
    // Winning conditions for diagonals for player 1
    else if ((storedClicks[0] === true && storedClicks[4] === true && storedClicks[8] === true) || (storedClicks[2] === true && storedClicks[4] === true && storedClicks[6] === true))
    {
       stillPlaying = false;
-      return itIsPlayerOne;
+      finishGame(itIsPlayerOne, player1, player2);
    }
    // Winning Conditions for rows for player 2
    else if ((storedClicks[0] === false && storedClicks[1] === false && storedClicks[2] === false) || (storedClicks[3] === false && storedClicks[4] === false && storedClicks[5] === false) || (storedClicks[6] === false && storedClicks[7] === false && storedClicks[8] === false))
    {
       stillPlaying = false;
-      return itIsPlayerOne;
+      finishGame(itIsPlayerOne, player1, player2);
    }
    // Winning conditions for columns for player 2
    else if ((storedClicks[0] === false && storedClicks[3] === false && storedClicks[6] === false) || (storedClicks[1] === false && storedClicks[4] === false && storedClicks[7] === false) || (storedClicks[2] === false && storedClicks[5] === false && storedClicks[8] === false))
    {
       stillPlaying = false;
-      return itIsPlayerOne;
+      finishGame(itIsPlayerOne, player1, player2);
    }
    // Winning conditions for diagonals for player 2
    else if ((storedClicks[0] === false && storedClicks[4] === false && storedClicks[8] === false) || (storedClicks[2] === false && storedClicks[4] === false && storedClicks[6] === false))
    {
       stillPlaying = false;
-      return itIsPlayerOne;
+      finishGame(itIsPlayerOne, player1, player2);
    }
    // If no winning condition met, game ends in draw
    else if (numClicks === 9)
    {
       stillPlaying = false;
       boardNotFull = false;
-      console.log('Game ends in a draw');
-   }
-   else
-   {
-      stillPlaying = true;
+      finishGame(itIsPlayerOne, player1, player2);
    }
 }
 
@@ -161,7 +156,11 @@ var checkWinner = function(event, storedClicks, itIsPlayerOne)
 // Don't log the winner if its a draw
 var finishGame = function(itIsPlayerOne, player1, player2)
 {
-   if (itIsPlayerOne)
+   if (boardNotFull === false)
+   {
+      console.log('Game ends in a draw');
+   }
+   else if (itIsPlayerOne)
    {
       console.log("Doggo wins");
    }
