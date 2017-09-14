@@ -10,13 +10,44 @@
 
 <body>
    <header>
-      <h1>Tic Tac Toe</h1>
-      <button id="random">Player Randomiser</button>
+      <!-- player-profiles -->
+      <div class="player-profiles">
+         <!-- player1 -->
+         <div class="player1">
+            <!-- playericon-container -->
+            <div class="player-icon-container">
+               <img src="./images/sleepy_sza_sza.jpg" id="player1-icon" alt="">
+            </div>
+            <!-- end player-icon-container -->
+
+            <h3 id="player1-name">Sleepy Shoob Blep</h3>
+         </div>
+         <!-- end player1 -->
+
+         <!-- title -->
+         <div class="title">
+            <button id="reset">Reset Game</button>
+            <h1>Tic Tac Toe</h1>
+         </div>
+         <!-- end title -->
+
+         <!-- player2 -->
+         <div class="player2">
+            <!-- playericon-container -->
+            <div class="player-icon-container">
+               <img src="./images/peekaboo_daisy.jpg" id="player2-icon" alt="">
+            </div>
+            <!-- end player-icon-container -->
+            <h3 id="player2-name">Peekaboo Kitteh</h3>
+         </div>
+         <!-- end player2 -->
+      </div>
+      <!-- end player-profiles -->
    </header>
 
-   <!-- game-wrapper -->
-   <div class="game-screen-wrapper">
-      <h2>Player (number) Turn</h2>
+   <!-- game-container -->
+   <div class="game-screen-container">
+      <h2><span id="game-master"></span> <span id="player-turn"></span></h2>
 
       <!-- game-board -->
       <div class="game-board">
@@ -32,11 +63,7 @@
       </div>
       <!-- end game-board -->
    </div>
-   <!-- end game-wrapper -->
-
-   <footer>
-      <button id="reset">Reset Game</button>
-   </footer>
+   <!-- end game-container -->
 
    <script type="text/javascript" src="./script/app.js"></script>
 </body>

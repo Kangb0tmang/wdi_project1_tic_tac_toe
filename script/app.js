@@ -6,58 +6,53 @@ var stillPlaying = true;
 var boardNotFull = true;
 var numClicks = 0;
 
-// Click event for choosing who goes first
-randomButton.addEventListener('click', function()
-{
-   var itIsPlayerOne = Math.round(Math.random()) === 0;
-   randomButton.disabled = true;
-   startGame(itIsPlayerOne);
-});
-
-// Starting the game
-var startGame = function(itIsPlayerOne)
-{
-   // Build after basic function done
-   // buildGameBoard();
-   // Set playing order
-   setPlayingOrder(itIsPlayerOne);
-
-   // Taking turns with event listener
-   startTurns(itIsPlayerOne);
-}
-
 // Event click handler for reset button
 resetGame.addEventListener('click', function()
 {
    location.reload();
 });
 
-// Choosing who goes first
-var setPlayingOrder = function(itIsPlayerOne)
+// Starting the game
+var startGame = function()
 {
+   var itIsPlayerOne = Math.round(Math.random()) === 0;
+   var gameMaster = document.getElementById('game-master');
+   var playerTurn = document.getElementById('player-turn');
+   var player1Name = document.getElementById('player1-name').textContent + "!";
+   var player2Name = document.getElementById('player2-name').textContent + "!";
+
+   // Set playing order
+   setPlayingOrder(itIsPlayerOne, gameMaster, playerTurn, player1Name, player2Name);
+
+   // Taking turns with event listener
+   startTurns(itIsPlayerOne, gameMaster, playerTurn, player1Name, player2Name);
+}
+
+// Choosing who goes first
+var setPlayingOrder = function(itIsPlayerOne, gameMaster, playerTurn, player1Name, player2Name)
+{
+   gameMaster.textContent = "You're up ";
+
    if (itIsPlayerOne)
    {
-      console.log('Player 1 (Doggo) goes first');
-      // Set as player 1 goes first
+      playerTurn.textContent = player1Name;
    }
    else
    {
-      console.log('Player 2 (Kitteh) goes first');
-      // Set as player 2 goes first
+      playerTurn.textContent = player2Name;
    }
 
    return itIsPlayerOne;
 }
 
 // Players start taking turns
-var startTurns = function(itIsPlayerOne)
+var startTurns = function(itIsPlayerOne, gameMaster, playerTurn, player1Name, player2Name)
 {
-   var player1 = "./images/doggo.jpg";
-   var player2 = "./images/kitteh.jpeg";
+   var player1Img = document.getElementById('player1-icon').src;
+   var player2Img = document.getElementById('player2-icon').src;
    var gameBoard = document.querySelector('.game-board');
 
    // Click until winner found
-   // Change the game loop logic, a bit messy here
    gameBoard.addEventListener('click', function(event)
    {
       var checkSquare = event.target.id;
@@ -66,43 +61,65 @@ var startTurns = function(itIsPlayerOne)
       {
          if (stillPlaying)
          {
+
             if (itIsPlayerOne)
             {
-               changeSquare(player1);
+               changeSquare(player1Img);
             }
             else
             {
-               changeSquare(player2);
+               changeSquare(player2Img);
             }
 
-            checkWinner(event, storedClicks, itIsPlayerOne);
-            itIsPlayerOne = changePlayerTurn(itIsPlayerOne);
+            checkWinner(event, storedClicks, itIsPlayerOne, gameMaster, playerTurn);
+            itIsPlayerOne = changePlayerTurn(itIsPlayerOne, playerTurn, player1Name, player2Name);
          }
       }
    });
 }
 
 // Changing square for each player
-var changeSquare = function(player)
+var changeSquare = function(playerImg)
 {
    var insertImg = document.createElement("img");
    var imgSrc = document.createAttribute("src");
-   imgSrc.value = player;
+   imgSrc.value = playerImg;
+   insertImg.className = "player-img";
    event.target.appendChild(insertImg);
    insertImg.setAttributeNode(imgSrc);
    numClicks += 1;
 }
 
+// Changing player name
+var changeName = function(playerTurn, playerName)
+{
+   playerTurn.textContent = playerName;
+   return playerTurn;
+}
+
 // Changing turns
-var changePlayerTurn = function(itIsPlayerOne)
+var changePlayerTurn = function(itIsPlayerOne, playerTurn, player1Name, player2Name)
 {
    itIsPlayerOne = !itIsPlayerOne;
+
+   if (stillPlaying)
+   {
+      if (itIsPlayerOne)
+      {
+         changeName(playerTurn, player1Name);
+      }
+      else
+      {
+         changeName(playerTurn, player2Name);
+      }
+   }
+
    return itIsPlayerOne;
 }
 
 // Check Winner
 // Refactor winning conditions...lol
-var checkWinner = function(event, storedClicks, itIsPlayerOne, player1, player2)
+var checkWinner = function(event, storedClicks, itIsPlayerOne, gameMaster, playerTurn)
 {
    var checkSquare = event.target.id;
    storedClicks[checkSquare] = itIsPlayerOne ? true : false;
@@ -111,61 +128,64 @@ var checkWinner = function(event, storedClicks, itIsPlayerOne, player1, player2)
    if ((storedClicks[0] === true && storedClicks[1] === true && storedClicks[2] === true) || (storedClicks[3] === true && storedClicks[4] === true && storedClicks[5] === true) || (storedClicks[6] === true && storedClicks[7] === true && storedClicks[8] === true))
    {
       stillPlaying = false;
-      finishGame(itIsPlayerOne, player1, player2);
+      finishGame(itIsPlayerOne, gameMaster);
    }
    // Winning conditions for columns for player 1
    else if ((storedClicks[0] === true && storedClicks[3] === true && storedClicks[6] === true) || (storedClicks[1] === true && storedClicks[4] === true && storedClicks[7] === true) || (storedClicks[2] === true && storedClicks[5] === true && storedClicks[8] === true))
    {
       stillPlaying = false;
-      finishGame(itIsPlayerOne, player1, player2);
+      finishGame(itIsPlayerOne, gameMaster);
    }
    // Winning conditions for diagonals for player 1
    else if ((storedClicks[0] === true && storedClicks[4] === true && storedClicks[8] === true) || (storedClicks[2] === true && storedClicks[4] === true && storedClicks[6] === true))
    {
       stillPlaying = false;
-      finishGame(itIsPlayerOne, player1, player2);
+      finishGame(itIsPlayerOne, gameMaster);
    }
    // Winning Conditions for rows for player 2
    else if ((storedClicks[0] === false && storedClicks[1] === false && storedClicks[2] === false) || (storedClicks[3] === false && storedClicks[4] === false && storedClicks[5] === false) || (storedClicks[6] === false && storedClicks[7] === false && storedClicks[8] === false))
    {
       stillPlaying = false;
-      finishGame(itIsPlayerOne, player1, player2);
+      finishGame(itIsPlayerOne, gameMaster);
    }
    // Winning conditions for columns for player 2
    else if ((storedClicks[0] === false && storedClicks[3] === false && storedClicks[6] === false) || (storedClicks[1] === false && storedClicks[4] === false && storedClicks[7] === false) || (storedClicks[2] === false && storedClicks[5] === false && storedClicks[8] === false))
    {
       stillPlaying = false;
-      finishGame(itIsPlayerOne, player1, player2);
+      finishGame(itIsPlayerOne, gameMaster);
    }
    // Winning conditions for diagonals for player 2
    else if ((storedClicks[0] === false && storedClicks[4] === false && storedClicks[8] === false) || (storedClicks[2] === false && storedClicks[4] === false && storedClicks[6] === false))
    {
       stillPlaying = false;
-      finishGame(itIsPlayerOne, player1, player2);
+      finishGame(itIsPlayerOne, gameMaster);
    }
    // If no winning condition met, game ends in draw
    else if (numClicks === 9)
    {
       stillPlaying = false;
       boardNotFull = false;
-      finishGame(itIsPlayerOne, player1, player2);
+      finishGame(itIsPlayerOne, gameMaster, playerTurn);
    }
 }
 
 // Finish game
-// Don't log the winner if its a draw
-var finishGame = function(itIsPlayerOne, player1, player2)
+var finishGame = function(itIsPlayerOne, gameMaster, playerTurn)
 {
    if (boardNotFull === false)
    {
-      console.log('Game ends in a draw');
+      gameMaster.textContent = "It's a hecking draw!";
+      playerTurn.textContent = "";
    }
    else if (itIsPlayerOne)
    {
-      console.log("Doggo wins");
+      gameMaster.textContent = "Winner is ";
    }
    else
    {
-      console.log("Kitteh wins");
+      gameMaster.textContent = "Winner is ";
    }
 }
+
+// Start game on screen load
+startGame();
