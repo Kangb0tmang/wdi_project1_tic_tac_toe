@@ -1,5 +1,3 @@
-// Global Variables (Avoid adding lots of them! They bad!)
-var randomButton = document.querySelector('#random');
 var resetGame = document.querySelector('#reset');
 var storedClicks = ["", "", "", "", "", "", "", "", ""];
 var stillPlaying = true;
@@ -58,11 +56,11 @@ var startTurns = function(itIsPlayerOne, gameMaster, playerTurn, player1Name, pl
    {
       var checkSquare = event.target.id;
 
+      // Check if image already clicked
       if (storedClicks[checkSquare] === "")
       {
          if (stillPlaying)
          {
-
             if (itIsPlayerOne)
             {
                changeSquare(player1Img);
