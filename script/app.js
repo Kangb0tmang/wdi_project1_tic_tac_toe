@@ -5,6 +5,7 @@ var storedClicks = ["", "", "", "", "", "", "", "", ""];
 var stillPlaying = true;
 var boardNotFull = true;
 var numClicks = 0;
+var imageCount = 1;
 
 // Event click handler for reset button
 resetGame.addEventListener('click', function()
@@ -78,6 +79,14 @@ var startTurns = function(itIsPlayerOne, gameMaster, playerTurn, player1Name, pl
    });
 }
 
+// Image Transition
+var imageTransition = function()
+{
+   var animateImg = document.getElementById("image" + imageCount);
+   animateImg.classList.add('move-up');
+   imageCount += 1;
+}
+
 // Changing square for each player
 var changeSquare = function(playerImg)
 {
@@ -85,9 +94,12 @@ var changeSquare = function(playerImg)
    var imgSrc = document.createAttribute("src");
    imgSrc.value = playerImg;
    insertImg.className = "player-img";
+   insertImg.id = "image" + imageCount;
    event.target.appendChild(insertImg);
    insertImg.setAttributeNode(imgSrc);
    numClicks += 1;
+
+   setTimeout(imageTransition, 50);
 }
 
 // Changing player name

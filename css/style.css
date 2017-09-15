@@ -10,13 +10,15 @@ span
 body
 {
    margin: 0;
+   background: url("../images/happy.jpg");
+   background-origin: content-box;
 }
 
 header
 {
    width: auto;
    text-align: center;
-   background: aquamarine;
+   background: aliceblue;
 }
 
 .player-profiles
@@ -104,6 +106,10 @@ header
    max-width: 1200px;
    margin: 30px auto;
    text-align: center;
+   background: snow;
+   -webkitbox-sizing: border-box;
+   -mozbox-sizing: border-box;
+   box-sizing: border-box;
 }
 
 #game-master,
@@ -137,14 +143,20 @@ header
 
 .grid-squares
 {
-   height: 33.33%;
-   width: 33%;
+   height: 33.33333%;
+   width: 33.333333%;
    border: 10px solid deepskyblue;
    display: inline-block;
    vertical-align: top;
+   overflow: visible;
    -webkitbox-sizing: border-box;
    -mozbox-sizing: border-box;
    box-sizing: border-box;
+}
+
+.grid-squares:hover
+{
+   background: aquamarine;
 }
 
 .grid-squares:nth-child(1),
@@ -177,14 +189,21 @@ header
 
 .player-img
 {
-   object-fit: cover;
-   width: 80%;
-   height: 100%;
+   max-width: 80%;
+   max-height: 100%;
    cursor: not-allowed;
+   -webkit-transform: translateY(200px);
+   -moz-transform: translateY(200px);
+   transform: translateY(200px);
+   -webkit-transition: all 0.3s ease-in-out;
+   -moz-transition: all 0.3s ease-in-out;
+   transition: all 0.3s ease-in-out;
 }
 
-footer
+.move-up
 {
-   width: auto;
-   background: tomato;
+   z-index: 0;
+   -webkit-transform: translateY(0px);
+   -moz-transform: translateY(0px);
+   transform: translateY(0px);
 }
